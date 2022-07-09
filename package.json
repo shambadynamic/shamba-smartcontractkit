@@ -1,0 +1,24 @@
+{
+    "name": "@shambadynamic/shamba-smartcontractkit",
+    "version": "1.0.0",
+    "description": "Shamba Smart Contracts",
+    "main": "index.js",
+    "scripts": {
+        "test": "exit 0",
+        "acp": "git add . && npm run commit && git push",
+        "commit": "git-cz",
+        "semantic-release": "semantic-release --branches main"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shambadynamic/shamba-smartcontractkit-new.git"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    },
+    "author": "shambadynamic",
+    "license": "MIT",
+    "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit#readme"
+}
