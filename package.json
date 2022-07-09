@@ -4,6 +4,7 @@
     "description": "Shamba Smart Contracts",
     "main": "index.js",
     "scripts": {
+        "test": "exit 0",
         "acp": "git add . && npm run commit && git push",
         "commit": "git-cz",
         "semantic-release": "semantic-release --branches main"
