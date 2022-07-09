@@ -13,15 +13,16 @@
         "type": "git",
         "url": "https://github.com/shambadynamic/shamba-smartcontractkit-new.git"
     },
-    "config": {
-        "commitizen": {
-            "path": "./node_modules/cz-conventional-changelog"
-        }
-    },
     "author": "shambadynamic",
     "license": "MIT",
     "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit-new#readme",
     "devDependencies": {
+        "cz-conventional-changelog": "^3.3.0",
         "semantic-release": "^19.0.3"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
     }
 }
