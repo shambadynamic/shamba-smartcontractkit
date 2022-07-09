@@ -13,6 +13,9 @@
         "type": "git",
         "url": "https://github.com/shambadynamic/shamba-smartcontractkit-new.git"
     },
+    "publishConfig": {
+        "access": "public"
+    },
     "author": "shambadynamic",
     "license": "MIT",
     "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit-new#readme",
