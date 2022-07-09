@@ -1,6 +1,6 @@
 {
     "name": "@shambadynamic/shamba-smartcontractkit",
-    "version": "0.0.0-development",
+    "version": "1.0.0",
     "description": "Shamba Smart Contracts",
     "main": "index.js",
     "scripts": {
