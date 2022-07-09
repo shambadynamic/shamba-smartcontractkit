@@ -1,6 +1,6 @@
 {
     "name": "@shambadynamic/shamba-smartcontractkit",
-    "version": "1.0.0",
+    "version": "0.0.0-development",
     "description": "Shamba Smart Contracts",
     "main": "index.js",
     "scripts": {
@@ -20,5 +20,8 @@
     },
     "author": "shambadynamic",
     "license": "MIT",
-    "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit#readme"
+    "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit-new#readme",
+    "devDependencies": {
+        "semantic-release": "^19.0.3"
+    }
 }
