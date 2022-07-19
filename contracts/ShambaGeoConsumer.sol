@@ -3,13 +3,15 @@ pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "./utils/ShambaOperatorSelector.sol";
 
-contract ShambaGeoConsumer is ChainlinkClient {
+contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
     using Chainlink for Chainlink.Request;
-
+    ShambaOperatorSelector shambaOperatorSelector = new ShambaOperatorSelector();
     int256 private geostats_data;
     string private cid;
     uint256 public total_oracle_calls = 0;
+    uint256 private operatorNumber;
 
     mapping(uint256 => string) private cids;
 
@@ -19,6 +21,7 @@ contract ShambaGeoConsumer is ChainlinkClient {
     }
 
     mapping(uint256 => string) geometry_map;
+
 
     function getGeometry(uint256 property_id)
         public
@@ -32,9 +35,10 @@ contract ShambaGeoConsumer is ChainlinkClient {
         return cids[index];
     }
 
-    constructor() {
-        setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB);
-        setChainlinkOracle(0xd655099967AD0D861Fd5a50fA60c59039718cf80);
+    constructor(uint256 operator_number) {
+        operatorNumber = operator_number;
+        setChainlinkToken(shambaOperatorSelector.linkTokenContractAddress(operator_number));
+        setChainlinkOracle(shambaOperatorSelector.operatorAddress(operator_number));
     }
 
     function concat(string memory a, string memory b)
@@ -54,7 +58,7 @@ contract ShambaGeoConsumer is ChainlinkClient {
         string memory end_date,
         Geometry[] memory geometry
     ) public {
-        bytes32 specId = "ffc6c83b890147a4b098eb777f2e0bae";
+        bytes32 specId = shambaOperatorSelector.jobSpecId(operatorNumber, "geo-statistics");
 
         uint256 payment = 1000000000000000000;
         Chainlink.Request memory req = buildChainlinkRequest(
@@ -81,6 +85,7 @@ contract ShambaGeoConsumer is ChainlinkClient {
         );
 
         for (uint256 i = 0; i < geometry.length; i++) {
+
             geometry_map[geometry[i].property_id] = geometry[i].coordinates;
 
             concatenated_data = concat(

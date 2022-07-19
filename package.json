@@ -11,14 +11,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/shambadynamic/shamba-smartcontractkit-new.git"
+        "url": "https://github.com/shambadynamic/shamba-smartcontractkit.git"
     },
     "publishConfig": {
         "access": "public"
     },
     "author": "shambadynamic",
     "license": "MIT",
-    "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit-new#readme",
+    "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit#readme",
     "devDependencies": {
         "cz-conventional-changelog": "^3.3.0",
         "semantic-release": "^19.0.3"
