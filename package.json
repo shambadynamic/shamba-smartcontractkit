@@ -1,6 +1,6 @@
 {
     "name": "@shambadynamic/contracts",
-    "version": "1.0.1",
+    "version": "0.0.0-development",
     "description": "Shamba Smart Contracts",
     "main": "index.js",
     "scripts": {
