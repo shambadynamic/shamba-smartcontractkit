@@ -18,6 +18,8 @@ contract ShambaOperatorSelector {
         } else if (operator_number == 5) {
             return 0x105a6BC318dCF3Fc73472c8833ccD7c684449B90;
         } else if (operator_number == 6) {
+            return 0xAb40bb95B79b62c9145C475d52eA07e0e1c576e3;
+        } else if (operator_number == 7) {
             return 0xf77f8d0691F15c4F4B51cd1Fb6B8d9C9fd5143D9;
         } else {
             return 0x0000000000000000000000000000000000000000;
@@ -40,6 +42,8 @@ contract ShambaOperatorSelector {
         } else if (operator_number == 5) {
             return 0x01BE23585060835E02B77ef475b0Cc51aA1e0709;
         } else if (operator_number == 6) {
+            return 0x3706bdD2d30474a5069E1451AB860a2570B1c249;
+        } else if (operator_number == 7) {
             return 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
         } else {
             return 0x0000000000000000000000000000000000000000;
@@ -62,6 +66,8 @@ contract ShambaOperatorSelector {
         } else if (operator_number == 5) {
             return "Ethereum Rinkeby";
         } else if (operator_number == 6) {
+            return "Moonbase Alpha";
+        } else if (operator_number == 7) {
             return "Polygon Mumbai";
         } else {
             return "";
@@ -123,6 +129,16 @@ contract ShambaOperatorSelector {
                 return "";
             }
         } else if (operator_number == 6) {
+            if (compareStringsbyBytes(geospatial_category, "geo-statistics")) {
+                return "0e4428bd941545a68f1dcb00c33d454a";
+            } else if (
+                compareStringsbyBytes(geospatial_category, "fire-analysis")
+            ) {
+                return "ac1e7b2794e9492dacbf578d4925b083";
+            } else {
+                return "";
+            }
+        } else if (operator_number == 7) {
             if (compareStringsbyBytes(geospatial_category, "geo-statistics")) {
                 return "4e50c49eb10a4e0ebe68e0efcd40548d";
             } else if (

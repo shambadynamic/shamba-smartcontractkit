@@ -61,6 +61,9 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
         bytes32 specId = shambaOperatorSelector.jobSpecId(operatorNumber, "geo-statistics");
 
         uint256 payment = 1000000000000000000;
+        if (operatorNumber == 6) {
+            payment = 0;
+        }
         Chainlink.Request memory req = buildChainlinkRequest(
             specId,
             address(this),
