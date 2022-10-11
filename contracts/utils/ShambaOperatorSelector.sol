@@ -20,7 +20,7 @@ contract ShambaOperatorSelector {
         } else if (operator_number == 6) {
             return 0xAb40bb95B79b62c9145C475d52eA07e0e1c576e3;
         } else if (operator_number == 7) {
-            return 0xf77f8d0691F15c4F4B51cd1Fb6B8d9C9fd5143D9;
+            return 0x6D5BdcB8B5672E809a1f8c088efe53c9153e5f3C;
         } else {
             return 0x0000000000000000000000000000000000000000;
         }
@@ -140,7 +140,7 @@ contract ShambaOperatorSelector {
             }
         } else if (operator_number == 7) {
             if (compareStringsbyBytes(geospatial_category, "geo-statistics")) {
-                return "4e50c49eb10a4e0ebe68e0efcd40548d";
+                return "5df1a1ea26b3426e9ef7492d3db35377";
             } else if (
                 compareStringsbyBytes(geospatial_category, "fire-analysis")
             ) {
