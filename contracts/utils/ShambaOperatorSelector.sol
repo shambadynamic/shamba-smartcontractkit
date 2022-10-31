@@ -144,7 +144,7 @@ contract ShambaOperatorSelector {
             } else if (
                 compareStringsbyBytes(geospatial_category, "fire-analysis")
             ) {
-                return "9604e1bba4a1476db33efdd3eb915784";
+                return "";
             } else {
                 return "";
             }
