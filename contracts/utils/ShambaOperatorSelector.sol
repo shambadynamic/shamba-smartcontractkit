@@ -140,7 +140,7 @@ contract ShambaOperatorSelector {
             }
         } else if (operator_number == 7) {
             if (compareStringsbyBytes(geospatial_category, "geo-statistics")) {
-                return "5df1a1ea26b3426e9ef7492d3db35377";
+                return "6f681e8b883d4ee9a33a1508c1a3b4bc";
             } else if (
                 compareStringsbyBytes(geospatial_category, "fire-analysis")
             ) {
