@@ -3,15 +3,14 @@ pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./utils/ShambaOperatorSelector.sol";
+import "./utils/ShambaChainSelector.sol";
 
-contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
+contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
     using Chainlink for Chainlink.Request;
-    ShambaOperatorSelector shambaOperatorSelector = new ShambaOperatorSelector();
+    ShambaChainSelector shambaChainSelector;
     int256 private geostats_data;
     string private cid;
     uint256 public total_oracle_calls = 0;
-    uint256 private operatorNumber;
 
     mapping(uint256 => string) private cids;
 
@@ -21,7 +20,6 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
     }
 
     mapping(uint256 => string) geometry_map;
-
 
     function getGeometry(uint256 property_id)
         public
@@ -35,10 +33,10 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
         return cids[index];
     }
 
-    constructor(uint256 operator_number) {
-        operatorNumber = operator_number;
-        setChainlinkToken(shambaOperatorSelector.linkTokenContractAddress(operator_number));
-        setChainlinkOracle(shambaOperatorSelector.operatorAddress(operator_number));
+    constructor(uint256 chain_id) ShambaChainSelector(chain_id) {
+        shambaChainSelector = new ShambaChainSelector(chain_id);
+        setChainlinkToken(shambaChainSelector.linkTokenContractAddress());
+        setChainlinkOracle(shambaChainSelector.operatorAddress());
     }
 
     function concat(string memory a, string memory b)
@@ -58,12 +56,10 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
         string memory end_date,
         Geometry[] memory geometry
     ) public {
-        bytes32 specId = shambaOperatorSelector.jobSpecId(operatorNumber, "geo-statistics");
+        bytes32 specId = shambaChainSelector.jobSpecId("geo-statistics");
 
-        uint256 payment = 1000000000000000000;
-        if (operatorNumber == 6) {
-            payment = 0;
-        }
+        uint256 payment = 10**18;
+
         Chainlink.Request memory req = buildChainlinkRequest(
             specId,
             address(this),
@@ -88,7 +84,6 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
         );
 
         for (uint256 i = 0; i < geometry.length; i++) {
-
             geometry_map[geometry[i].property_id] = geometry[i].coordinates;
 
             concatenated_data = concat(
@@ -135,5 +130,9 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaOperatorSelector {
 
     function getGeostatsData() public view returns (int256) {
         return geostats_data;
+    }
+
+    function getLatestCid() public view returns (string memory) {
+        return cid;
     }
 }
