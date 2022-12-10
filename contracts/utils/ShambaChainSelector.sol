@@ -67,6 +67,10 @@ contract ShambaChainSelector {
             compareStringsbyBytes(geospatial_category, "fire-analysis")
         ) {
             return "f42b8d9cf9b54f7b9cf3ab4df53d6df3";
+        } else if (compareStringsbyBytes(geospatial_category, "sni-lap")) {
+            return "d4c11c35b72142a984eb888236682f08";
+        } else if (compareStringsbyBytes(geospatial_category, "sni-hwc")) {
+            return "9157b0702f8e4ca7b805c1e0a589f9da";
         } else {
             return "";
         }
