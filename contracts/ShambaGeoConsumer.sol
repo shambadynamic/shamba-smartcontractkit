@@ -15,13 +15,13 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
     mapping(uint256 => string) private cids;
 
     struct Geometry {
-        uint256 property_id;
+        uint8 property_id;
         string coordinates;
     }
 
-    mapping(uint256 => string) geometry_map;
+    mapping(uint8 => string) geometry_map;
 
-    function getGeometry(uint256 property_id)
+    function getGeometry(uint8 property_id)
         public
         view
         returns (string memory)
@@ -33,7 +33,7 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
         return cids[index];
     }
 
-    constructor(uint256 chain_id) ShambaChainSelector(chain_id) {
+    constructor(uint64 chain_id) ShambaChainSelector(chain_id) {
         shambaChainSelector = new ShambaChainSelector(chain_id);
         setChainlinkToken(shambaChainSelector.linkTokenContractAddress());
         setChainlinkOracle(shambaChainSelector.operatorAddress());
@@ -56,12 +56,9 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
         string memory end_date,
         Geometry[] memory geometry
     ) public {
-        bytes32 specId = shambaChainSelector.jobSpecId("geo-statistics");
-
-        uint256 payment = 10**18;
 
         Chainlink.Request memory req = buildChainlinkRequest(
-            specId,
+            shambaChainSelector.jobSpecId("geo-statistics"),
             address(this),
             this.fulfillGeostatsData.selector
         );
@@ -113,7 +110,7 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
 
         req.add("data", req_data);
 
-        sendOperatorRequest(req, payment);
+        sendOperatorRequest(req, 10**18);
     }
 
     function fulfillGeostatsData(

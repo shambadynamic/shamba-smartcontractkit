@@ -2,9 +2,9 @@
 pragma solidity ^0.8.7;
 
 contract ShambaChainSelector {
-    uint256 private chainId;
+    uint64 private chainId;
 
-    constructor(uint256 chain_id) {
+    constructor(uint64 chain_id) {
         chainId = chain_id;
     }
 

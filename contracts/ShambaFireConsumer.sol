@@ -33,7 +33,7 @@ contract ShambaFireConsumer is ChainlinkClient, ShambaChainSelector {
         return cids[index];
     }
 
-    constructor(uint256 chain_id) ShambaChainSelector(chain_id) {
+    constructor(uint64 chain_id) ShambaChainSelector(chain_id) {
         shambaChainSelector = new ShambaChainSelector(chain_id);
         setChainlinkToken(shambaChainSelector.linkTokenContractAddress());
         setChainlinkOracle(shambaChainSelector.operatorAddress());
