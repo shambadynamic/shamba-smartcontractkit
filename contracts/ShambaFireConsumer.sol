@@ -15,13 +15,13 @@ contract ShambaFireConsumer is ChainlinkClient, ShambaChainSelector {
     mapping(uint256 => string) private cids;
 
     struct Geometry {
-        uint256 property_id;
+        uint8 property_id;
         string coordinates;
     }
 
-    mapping(uint256 => string) geometry_map;
+    mapping(uint8 => string) geometry_map;
 
-    function getGeometry(uint256 property_id)
+    function getGeometry(uint8 property_id)
         public
         view
         returns (string memory)
