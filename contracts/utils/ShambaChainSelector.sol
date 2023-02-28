@@ -2,7 +2,7 @@
 pragma solidity ^0.8.7;
 
 contract ShambaChainSelector {
-    uint64 private chainId;
+    uint64 public chainId;
 
     constructor(uint64 chain_id) {
         chainId = chain_id;
@@ -19,6 +19,8 @@ contract ShambaChainSelector {
             return 0xBB370F829bdB6fC44f3D34e2A2107578bB2c3F0B;
         } else if (chainId == 80001) {
             return 0x6D5BdcB8B5672E809a1f8c088efe53c9153e5f3C;
+        } else if (chainId == 137) {
+            return 0x67F98d5f668a4408a72a9EeE4831bFe098a2Fed6;
         } else {
             return 0x0000000000000000000000000000000000000000;
         }
@@ -35,6 +37,8 @@ contract ShambaChainSelector {
             return 0xdc2CC710e42857672E7907CF474a69B63B93089f;
         } else if (chainId == 80001) {
             return 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
+        } else if (chainId == 137) {
+            return 0xb0897686c545045aFc77CF20eC7A532E3120E0F1;
         } else {
             return 0x0000000000000000000000000000000000000000;
         }
@@ -51,6 +55,8 @@ contract ShambaChainSelector {
             return "Optimism Goerli";
         } else if (chainId == 80001) {
             return "Polygon Mumbai";
+        } else if (chainId == 137) {
+            return "Polygon Mainnet";
         } else {
             return "";
         }

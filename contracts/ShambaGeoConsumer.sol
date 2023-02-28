@@ -110,7 +110,12 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
 
         req.add("data", req_data);
 
-        sendOperatorRequest(req, 10**18);
+        if (shambaChainSelector.chainId == 137) {
+            sendOperatorRequest(req, 0);
+        }
+        else {
+            sendOperatorRequest(req, 10**18);
+        }
     }
 
     function fulfillGeostatsData(
