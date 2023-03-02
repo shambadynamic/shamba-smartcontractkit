@@ -57,6 +57,9 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
         Geometry[] memory geometry
     ) public {
 
+        geostats_data = -1;
+        cid = "";
+
         Chainlink.Request memory req = buildChainlinkRequest(
             shambaChainSelector.jobSpecId("geo-statistics"),
             address(this),
@@ -124,7 +127,6 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
         string calldata cidValue
     ) public recordChainlinkFulfillment(requestId) {
         geostats_data = geostatsData;
-
         cid = cidValue;
         cids[total_oracle_calls] = cid;
         total_oracle_calls = total_oracle_calls + 1;
