@@ -21,6 +21,8 @@ contract ShambaChainSelector {
             return 0x6D5BdcB8B5672E809a1f8c088efe53c9153e5f3C;
         } else if (chainId == 137) {
             return 0x67F98d5f668a4408a72a9EeE4831bFe098a2Fed6;
+        } else if (chainId == 200101) {
+            return 0xAb40bb95B79b62c9145C475d52eA07e0e1c576e3;
         } else {
             return 0x0000000000000000000000000000000000000000;
         }
@@ -39,6 +41,8 @@ contract ShambaChainSelector {
             return 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
         } else if (chainId == 137) {
             return 0xb0897686c545045aFc77CF20eC7A532E3120E0F1;
+        } else if (chainId == 200101) {
+            return 0x26E52c99238fea58A4AafDc1Ee3775D19BCc39fb;
         } else {
             return 0x0000000000000000000000000000000000000000;
         }
@@ -57,6 +61,8 @@ contract ShambaChainSelector {
             return "Polygon Mumbai";
         } else if (chainId == 137) {
             return "Polygon Mainnet";
+        } else if (chainId == 200101) {
+            return "Milkomeda-C1 Testnet";
         } else {
             return "";
         }
