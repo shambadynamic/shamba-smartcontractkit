@@ -24,7 +24,7 @@ contract ShambaChainSelector {
         } else if (chainId == 200101) {
             return 0xAb40bb95B79b62c9145C475d52eA07e0e1c576e3;
         } else {
-            return 0x0000000000000000000000000000000000000000;
+            return address(0);
         }
     }
 
@@ -44,7 +44,7 @@ contract ShambaChainSelector {
         } else if (chainId == 200101) {
             return 0x26E52c99238fea58A4AafDc1Ee3775D19BCc39fb;
         } else {
-            return 0x0000000000000000000000000000000000000000;
+            return address(0);
         }
     }
 

@@ -2,7 +2,6 @@
 pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 import "./utils/ShambaChainSelector.sol";
 
 contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
@@ -14,47 +13,17 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
 
     mapping(uint256 => string) private cids;
 
-    struct Geometry {
-        uint8 property_id;
-        string coordinates;
-    }
-
-    mapping(uint8 => string) geometry_map;
-
-    function getGeometry(uint8 property_id)
-        public
-        view
-        returns (string memory)
-    {
-        return geometry_map[property_id];
-    }
-
-    function getCid(uint256 index) public view returns (string memory) {
-        return cids[index];
-    }
-
+    /// @param chain_id    ETH Chain Id of the network on which the contract is getting deployed
     constructor(uint64 chain_id) ShambaChainSelector(chain_id) {
         shambaChainSelector = new ShambaChainSelector(chain_id);
         setChainlinkToken(shambaChainSelector.linkTokenContractAddress());
         setChainlinkOracle(shambaChainSelector.operatorAddress());
     }
 
-    function concat(string memory a, string memory b)
-        private
-        pure
-        returns (string memory)
-    {
-        return (string(abi.encodePacked(a, "", b)));
-    }
-
+    /// @notice Called by a user to send a request to the Shamba Oracle.
+    /// @param requestIpfsCid    You can get the requestIpfsCid using Shamba Contracts Tool available at https://contracts.shamba.app
     function requestGeostatsData(
-        string memory agg_x,
-        string memory dataset_code,
-        string memory selected_band,
-        string memory image_scale,
-        string memory start_date,
-        string memory end_date,
-        Geometry[] memory geometry
+        string memory requestIpfsCid
     ) public {
 
         geostats_data = -1;
@@ -66,51 +35,6 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
             this.fulfillGeostatsData.selector
         );
 
-        string memory concatenated_data = concat('{"agg_x":"', agg_x);
-
-        concatenated_data = concat(concatenated_data, '", "dataset_code":"');
-        concatenated_data = concat(concatenated_data, dataset_code);
-        concatenated_data = concat(concatenated_data, '", "selected_band":"');
-        concatenated_data = concat(concatenated_data, selected_band);
-        concatenated_data = concat(concatenated_data, '", "image_scale":');
-        concatenated_data = concat(concatenated_data, image_scale);
-        concatenated_data = concat(concatenated_data, ', "start_date":"');
-        concatenated_data = concat(concatenated_data, start_date);
-        concatenated_data = concat(concatenated_data, '", "end_date":"');
-        concatenated_data = concat(concatenated_data, end_date);
-        concatenated_data = concat(
-            concatenated_data,
-            '", "geometry":{"type":"FeatureCollection","features":['
-        );
-
-        for (uint256 i = 0; i < geometry.length; i++) {
-            geometry_map[geometry[i].property_id] = geometry[i].coordinates;
-
-            concatenated_data = concat(
-                concatenated_data,
-                '{"type":"Feature","properties":{"id":'
-            );
-            concatenated_data = concat(
-                concatenated_data,
-                Strings.toString(geometry[i].property_id)
-            );
-            concatenated_data = concat(
-                concatenated_data,
-                '},"geometry":{"type":"Polygon","coordinates":'
-            );
-            concatenated_data = concat(
-                concatenated_data,
-                geometry[i].coordinates
-            );
-            concatenated_data = concat(concatenated_data, "}}");
-
-            if (i != geometry.length - 1) {
-                concatenated_data = concat(concatenated_data, ",");
-            }
-        }
-        concatenated_data = concat(concatenated_data, "]}}");
-        string memory req_data = concatenated_data;
-
         req.add("data", req_data);
 
         if (shambaChainSelector.chainId() == 137 || shambaChainSelector.chainId() == 200101) {
@@ -121,6 +45,7 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
         }
     }
 
+    /// @notice Called by the Shamba Oracle after the request being sent successfully.
     function fulfillGeostatsData(
         bytes32 requestId,
         int256 geostatsData,
@@ -132,11 +57,20 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
         total_oracle_calls = total_oracle_calls + 1;
     }
 
-    function getGeostatsData() public view returns (int256) {
+    /// @notice Called by a user to get the latest geostats data returned by the Shamba Oracle.
+    function getLatestGeostatsData() public view returns (int256) {
         return geostats_data;
     }
 
+    /// @notice Called by a user to get the latest IPFS Content Identifier containing the latest request sent to the Shamba Oracle and the corresponding response.
     function getLatestCid() public view returns (string memory) {
         return cid;
     }
+
+    /// @notice Called by a user to get the IPFS Content Identifier at a particular index containing the latest request sent to the Shamba Oracle and the corresponding response.
+    /// @param index       Index corresponding to the cids mapping 
+    function getCid(uint256 index) public view returns (string memory) {
+        return cids[index];
+    }
+
 }
