@@ -32,7 +32,7 @@ contract ShambaFireConsumer is ChainlinkClient, ShambaChainSelector {
             this.fulfillFireData.selector
         );
 
-        req.add("data", req_data);
+        req.add("data", requestIpfsCid);
 
         if (shambaChainSelector.chainId() == 137 || shambaChainSelector.chainId() == 200101) {
             sendOperatorRequest(req, 0);
