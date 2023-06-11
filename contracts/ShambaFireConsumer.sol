@@ -10,7 +10,6 @@ contract ShambaFireConsumer is ChainlinkClient, ShambaChainSelector {
     mapping(uint256 => uint256) private fire_data;
     string private cid;
     uint256 public total_oracle_calls = 0;
-
     mapping(uint256 => string) private cids;
 
     /// @param chain_id    ETH Chain Id of the network on which the contract is getting deployed
