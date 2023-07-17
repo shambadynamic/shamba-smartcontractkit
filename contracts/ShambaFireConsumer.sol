@@ -1,10 +1,11 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.20;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "./utils/ShambaChainSelector.sol";
+import "./utils/ShambaWhitelistAccounting.sol";
 
-contract ShambaFireConsumer is ChainlinkClient, ShambaChainSelector {
+contract ShambaFireConsumer is ChainlinkClient, ShambaChainSelector, ShambaWhitelistAccounting {
     using Chainlink for Chainlink.Request;
     ShambaChainSelector shambaChainSelector;
     mapping(uint256 => uint256) private fire_data;
@@ -23,7 +24,7 @@ contract ShambaFireConsumer is ChainlinkClient, ShambaChainSelector {
     /// @param requestIpfsCid    You can get the requestIpfsCid using Shamba Contracts Tool available at https://contracts.shamba.app
     function requestFireData(
         string memory requestIpfsCid
-    ) public {
+    ) public onlyWhitelistedAddress {
 
         Chainlink.Request memory req = buildChainlinkRequest(
             shambaChainSelector.jobSpecId("fire-analysis"),

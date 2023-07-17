@@ -1,16 +1,22 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.20;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "./utils/ShambaChainSelector.sol";
+import "./utils/ShambaWhitelistAccounting.sol";
 
-contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
+contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector, ShambaWhitelistAccounting {
     using Chainlink for Chainlink.Request;
     ShambaChainSelector shambaChainSelector;
     int256 private geostats_data;
     string private cid;
     uint256 public total_oracle_calls = 0;
     mapping(uint256 => string) private cids;
+
+    // whitelist accounting
+    mapping(address => bool) public isWhitelisted;
+    address[] public whitelistedAddresses;
+    uint256 addressWhitelistLength;
 
     /// @param chain_id    ETH Chain Id of the network on which the contract is getting deployed
     constructor(uint64 chain_id) ShambaChainSelector(chain_id) {
@@ -19,11 +25,11 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
         setChainlinkOracle(shambaChainSelector.operatorAddress());
     }
 
-    /// @notice Called by a user to send a request to the Shamba Oracle.
+    /// @notice Called by a whitelisted user to send a request to the Shamba Oracle.
     /// @param requestIpfsCid    You can get the requestIpfsCid using Shamba Contracts Tool available at https://contracts.shamba.app
     function requestGeostatsData(
         string memory requestIpfsCid
-    ) public {
+    ) public onlyWhitelistedAddress {
 
         geostats_data = -1;
         cid = "";
@@ -36,12 +42,7 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector {
 
         req.add("data", requestIpfsCid);
 
-        if (shambaChainSelector.chainId() == 137 || shambaChainSelector.chainId() == 200101) {
-            sendOperatorRequest(req, 0);
-        }
-        else {
-            sendOperatorRequest(req, 10**18);
-        }
+        sendOperatorRequest(req, 0);
     }
 
     /// @notice Called by the Shamba Oracle after the request being sent successfully.

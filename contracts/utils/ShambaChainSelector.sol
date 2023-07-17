@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.20;
 
 contract ShambaChainSelector {
     uint64 public chainId;
@@ -23,6 +23,8 @@ contract ShambaChainSelector {
             return 0x67F98d5f668a4408a72a9EeE4831bFe098a2Fed6;
         } else if (chainId == 200101) {
             return 0xAb40bb95B79b62c9145C475d52eA07e0e1c576e3;
+        } else if (chainId == 1440002) {
+            return 0xf8A6b3b38895C861C37F93EF8058F54B7c16fe75;
         } else {
             return address(0);
         }
@@ -43,6 +45,8 @@ contract ShambaChainSelector {
             return 0xb0897686c545045aFc77CF20eC7A532E3120E0F1;
         } else if (chainId == 200101) {
             return 0x26E52c99238fea58A4AafDc1Ee3775D19BCc39fb;
+        } else if (chainId == 1440002) {
+            return 0xCCB61d7BAA37E029d3ee654A0DC1cdAE06F56f0C;
         } else {
             return address(0);
         }
@@ -63,6 +67,8 @@ contract ShambaChainSelector {
             return "Polygon Mainnet";
         } else if (chainId == 200101) {
             return "Milkomeda-C1 Testnet";
+        } else if (chainId == 1440002) {
+            return "XRPL EVM Sidechain";
         } else {
             return "";
         }
