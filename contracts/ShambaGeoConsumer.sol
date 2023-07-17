@@ -13,11 +13,6 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector, ShambaWhitel
     uint256 public total_oracle_calls = 0;
     mapping(uint256 => string) private cids;
 
-    // whitelist accounting
-    mapping(address => bool) public isWhitelisted;
-    address[] public whitelistedAddresses;
-    uint256 addressWhitelistLength;
-
     /// @param chain_id    ETH Chain Id of the network on which the contract is getting deployed
     constructor(uint64 chain_id) ShambaChainSelector(chain_id) {
         shambaChainSelector = new ShambaChainSelector(chain_id);
