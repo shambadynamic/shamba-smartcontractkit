@@ -54,12 +54,12 @@ contract ShambaWhitelistAccounting {
     }
 
     modifier onlyWhitelistedAddress {
-        require(isWhitelisted[msg.sender] || msg.sender == whitelistingManager);
+        require(isWhitelisted[msg.sender] || msg.sender == whitelistingManager || tx.origin == whitelistingManager);
         _;
     }
 
     modifier onlyWhitelistingManager {
-        require(msg.sender == whitelistingManager);
+        require(msg.sender == whitelistingManager || tx.origin == whitelistingManager);
         _;
     }
 }
