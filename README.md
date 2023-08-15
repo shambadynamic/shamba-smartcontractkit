@@ -17,7 +17,8 @@ $ pnpm add @shambadynamic/contracts
 	├── ShambaFireConsumer.sol 
         ├── ShambaGeoConsumer.sol
         └── utils  # Utility Contracts
-              └─ ShambaChainSelector.sol  # Shamba Chain Selector Utility
+              ├─ ShambaChainSelector.sol        # Shamba Chain Selector Utility
+	      └─ ShambaWhitelistAccounting.sol  # Shamba Whitelist Accounting Utility
 ```
 
 ##### Usage
