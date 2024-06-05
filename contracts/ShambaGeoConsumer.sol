@@ -1,43 +1,40 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.24;
 
-import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
-import "./utils/ShambaChainSelector.sol";
-import "./utils/ShambaWhitelistAccounting.sol";
+import {ChainlinkClient, Chainlink} from "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import {ShambaWhitelistAccounting} from "./utils/ShambaWhitelistAccounting.sol";
+import {NetworkConfig} from "./utils/libraries/NetworkConfig.sol";
 
-contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector, ShambaWhitelistAccounting {
+contract ShambaGeoConsumer is ChainlinkClient, ShambaWhitelistAccounting {
     using Chainlink for Chainlink.Request;
-    ShambaChainSelector shambaChainSelector;
-    int256 private geostats_data;
-    string private cid;
-    uint256 public total_oracle_calls = 0;
-    mapping(uint256 => string) private cids;
 
-    /// @param chain_id    ETH Chain Id of the network on which the contract is getting deployed
-    constructor(uint256 chain_id) ShambaChainSelector(chain_id) {
-        shambaChainSelector = new ShambaChainSelector(chain_id);
-        setChainlinkToken(shambaChainSelector.linkTokenContractAddress());
-        setChainlinkOracle(shambaChainSelector.operatorAddress());
+    int256 private s_latestGeostatsData;
+    string private s_latestIpfsCid;
+    uint256 public s_totalOracleCalls = 0;
+    mapping(uint256 => string) private s_ipfsCids;
+
+    constructor() {
+        _setChainlinkToken(NetworkConfig.getLinkTokenAddress(block.chainid));
+        _setChainlinkOracle(NetworkConfig.getOperatorAddress(block.chainid));
     }
 
     /// @notice Called by a whitelisted user to send a request to the Shamba Oracle.
-    /// @param requestIpfsCid    You can get the requestIpfsCid using Shamba Contracts Tool available at https://contracts.shamba.app
+    /// @param requestBody     requestBody can be either a url containing the actual JSON request body or a hex string representing the bytes encoded JSON request body. You can get the requestBody in any of these formats using Shamba Contracts Tool available at https://contracts.shamba.app. The former one is recommended for large (in terms of number of coordinates) geoJSONs and the later one is recommended for rectangular geoJSONs and for faster turnaround/response times.
     function requestGeostatsData(
-        string memory requestIpfsCid
+        string calldata requestBody
     ) public onlyWhitelistedAddress {
+        s_latestGeostatsData = -1;
+        s_latestIpfsCid = "";
 
-        geostats_data = -1;
-        cid = "";
-
-        Chainlink.Request memory req = buildChainlinkRequest(
-            shambaChainSelector.jobSpecId("geo-statistics"),
+        Chainlink.Request memory req = _buildChainlinkRequest(
+            NetworkConfig.getJobSpecId("geo-statistics"),
             address(this),
             this.fulfillGeostatsData.selector
         );
 
-        req.add("data", requestIpfsCid);
+        req._add("data", requestBody);
 
-        sendOperatorRequest(req, 0);
+        _sendOperatorRequest(req, 0);
     }
 
     /// @notice Called by the Shamba Oracle after the request being sent successfully.
@@ -46,26 +43,29 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaChainSelector, ShambaWhitel
         int256 geostatsData,
         string calldata cidValue
     ) public recordChainlinkFulfillment(requestId) {
-        geostats_data = geostatsData;
-        cid = cidValue;
-        cids[total_oracle_calls] = cid;
-        total_oracle_calls = total_oracle_calls + 1;
+        s_latestGeostatsData = geostatsData;
+        s_latestIpfsCid = cidValue;
+        s_ipfsCids[s_totalOracleCalls] = s_latestIpfsCid;
+        s_totalOracleCalls = s_totalOracleCalls + 1;
     }
+
+    /* GETTERS */
 
     /// @notice Called by a user to get the latest geostats data returned by the Shamba Oracle.
     function getLatestGeostatsData() public view returns (int256) {
-        return geostats_data;
+        return s_latestGeostatsData;
     }
 
     /// @notice Called by a user to get the latest IPFS Content Identifier containing the latest request sent to the Shamba Oracle and the corresponding response.
-    function getLatestCid() public view returns (string memory) {
-        return cid;
+    function getLatestIpfsCid() public view returns (string memory) {
+        return s_latestIpfsCid;
     }
 
     /// @notice Called by a user to get the IPFS Content Identifier at a particular index containing the latest request sent to the Shamba Oracle and the corresponding response.
-    /// @param index       Index corresponding to the cids mapping 
-    function getCid(uint256 index) public view returns (string memory) {
-        return cids[index];
+    /// @param index       Index corresponding to the s_ipfsCids mapping
+    function getIpfsCidAtIndex(
+        uint256 index
+    ) public view returns (string memory) {
+        return s_ipfsCids[index];
     }
-
 }

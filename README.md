@@ -1,5 +1,16 @@
 # Shamba Smart Contracts
 
+## Prerequisites
+
+Install [@chainlink/contracts](https://www.npmjs.com/package/@chainlink/contracts) package:
+
+```
+# via npm
+$ npm install @chainlink/contracts --save
+# via pnpm
+$ pnpm add @chainlink/contracts
+```
+
 ## Installation
 
 ```
@@ -16,9 +27,10 @@ $ pnpm add @shambadynamic/contracts
 └── contracts  # Shamba Ecological Oracle Solidity Contracts
 	├── ShambaFireConsumer.sol 
         ├── ShambaGeoConsumer.sol
-        └── utils  # Utility Contracts
-              ├─ ShambaChainSelector.sol        # Shamba Chain Selector Utility
-	      └─ ShambaWhitelistAccounting.sol  # Shamba Whitelist Accounting Utility
+        └── utils  # Utility Contracts/Libraries
+              ├─ libraries 
+              |        └─ NetworkConfig.sol           # Network Config Utility Library
+	      └─ ShambaWhitelistAccounting.sol        # Shamba Whitelist Accounting Utility Contract
 ```
 
 ##### Usage
@@ -28,13 +40,13 @@ The solidity smart contracts themselves can be imported via the `contracts` dire
 ###### To import `ShambaGeoConsumer` contract:
 
 ```solidity
-import "@shambadynamic/contracts/contracts/ShambaGeoConsumer.sol";
+import {ShambaGeoConsumer} from "@shambadynamic/contracts/contracts/ShambaGeoConsumer.sol";
 ```
 
 ###### To import `ShambaFireConsumer` contract:
 
 ```solidity
-import "@shambadynamic/contracts/contracts/ShambaFireConsumer.sol";
+import {ShambaFireConsume} from "@shambadynamic/contracts/contracts/ShambaFireConsumer.sol";
 ```
 
 ## Local Development
