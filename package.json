@@ -16,7 +16,7 @@
     "publishConfig": {
         "access": "public"
     },
-    "author": "shambadynamic",
+    "author": "Shamba Network",
     "license": "MIT",
     "homepage": "https://github.com/shambadynamic/shamba-smartcontractkit#readme",
     "devDependencies": {

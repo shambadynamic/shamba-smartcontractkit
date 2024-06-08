@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {ChainlinkClient, Chainlink} from "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
+import {ChainlinkClient, Chainlink} from "@chainlink/contracts@1.1.1/src/v0.8/ChainlinkClient.sol";
 import {ShambaWhitelistAccounting} from "./utils/ShambaWhitelistAccounting.sol";
 import {NetworkConfig} from "./utils/libraries/NetworkConfig.sol";
 
@@ -19,7 +19,7 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaWhitelistAccounting {
     }
 
     /// @notice Called by a whitelisted user to send a request to the Shamba Oracle.
-    /// @param requestBody     requestBody can be either a url containing the actual JSON request body or a hex string representing the bytes encoded JSON request body. You can get the requestBody in any of these formats using Shamba Contracts Tool available at https://contracts.shamba.app. The former one is recommended for large (in terms of number of coordinates) geoJSONs and the later one is recommended for rectangular geoJSONs and for faster turnaround/response times.
+    /// @param requestBody     requestBody can be either a url containing the actual JSON request body or a hex string representing the bytes encoded JSON request body. You can get the requestBody in any of these formats using Shamba Contracts Tool available at https://contracts.shamba.app. The former one is recommended for large (in terms of number of coordinates) geoJSONs and the latter one is recommended for rectangular geoJSONs and for faster turnaround/response times.
     function requestGeostatsData(
         string calldata requestBody
     ) public onlyWhitelistedAddress {
