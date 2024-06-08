@@ -10,7 +10,7 @@ contract ShambaGeoConsumer is ChainlinkClient, ShambaWhitelistAccounting {
 
     int256 private s_latestGeostatsData;
     string private s_latestIpfsCid;
-    uint256 public s_totalOracleCalls = 0;
+    uint256 public s_totalOracleCalls;
     mapping(uint256 => string) private s_ipfsCids;
 
     constructor() {

@@ -2,6 +2,12 @@
 pragma solidity ^0.8.24;
 
 contract ShambaWhitelistAccounting {
+    error ShambaWhitelistAccounting__NeitherWhitelistedAddressNorWhitelistingManager();
+    error ShambaWhitelistAccounting__NotWhitelistingManager();
+    error ShambaWhitelistAccounting__AlreadyWhitelisted();
+    error ShambaWhitelistAccounting__NotWhitelisted();
+    error ShambaWhitelistAccounting__InvalidIndex();
+
     // whitelist accounting
     address private s_whitelistingManager =
         0x8C244f0B2164E6A3BED74ab429B0ebd661Bb14CA;
@@ -13,10 +19,8 @@ contract ShambaWhitelistAccounting {
     function addAddressToWhitelist(
         address _address
     ) external onlyWhitelistingManager {
-        require(
-            !s_isWhitelisted[_address],
-            "address must not be already whitelisted"
-        );
+        if (s_isWhitelisted[_address])
+            revert ShambaWhitelistAccounting__AlreadyWhitelisted();
         s_isWhitelisted[_address] = true;
         s_whitelistedAddresses.push(_address);
     }
@@ -28,14 +32,11 @@ contract ShambaWhitelistAccounting {
         address _address,
         uint256 whitelistIndex
     ) external onlyWhitelistingManager {
-        require(
-            s_isWhitelisted[_address],
-            "can only remove whitelisted addresses"
-        );
-        require(
-            s_whitelistedAddresses[whitelistIndex] == _address,
-            "index does not match address"
-        );
+        if (!s_isWhitelisted[_address])
+            revert ShambaWhitelistAccounting__NotWhitelisted();
+
+        if (s_whitelistedAddresses[whitelistIndex] != _address)
+            revert ShambaWhitelistAccounting__InvalidIndex();
 
         s_isWhitelisted[_address] = false;
 
@@ -95,19 +96,23 @@ contract ShambaWhitelistAccounting {
     /* MODIFIERS */
 
     modifier onlyWhitelistedAddress() {
-        require(
-            s_isWhitelisted[msg.sender] ||
-                msg.sender == s_whitelistingManager ||
-                tx.origin == s_whitelistingManager
-        );
+        if (
+            !s_isWhitelisted[msg.sender] &&
+            msg.sender != s_whitelistingManager &&
+            tx.origin != s_whitelistingManager
+        ) {
+            revert ShambaWhitelistAccounting__NeitherWhitelistedAddressNorWhitelistingManager();
+        }
         _;
     }
 
     modifier onlyWhitelistingManager() {
-        require(
-            msg.sender == s_whitelistingManager ||
-                tx.origin == s_whitelistingManager
-        );
+        if (
+            msg.sender != s_whitelistingManager &&
+            tx.origin != s_whitelistingManager
+        ) {
+            revert ShambaWhitelistAccounting__NotWhitelistingManager();
+        }
         _;
     }
 }

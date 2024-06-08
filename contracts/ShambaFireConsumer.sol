@@ -11,7 +11,7 @@ contract ShambaFireConsumer is ChainlinkClient, ShambaWhitelistAccounting {
     mapping(uint256 => uint256) private s_latestFireData;
     uint256 private s_latestFireDataLength;
     string private s_latestIpfsCid;
-    uint256 public s_totalOracleCalls = 0;
+    uint256 public s_totalOracleCalls;
     mapping(uint256 => string) private s_ipfsCids;
 
     constructor() {
